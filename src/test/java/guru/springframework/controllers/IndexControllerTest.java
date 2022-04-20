@@ -38,7 +38,7 @@ public class IndexControllerTest extends TestCase {
         //=>La méthode getRecipes() de RecipeService est appelée une fois
         verify(recipeService,times(1)).getRecipes();
         //=>La méthode addAttribute("recipes",recipeService.getRecipes()) du Model est appelée une fois
-        verify(model,times(1)).addAttribute("recipes", recipeService.getRecipes());
+        verify(model,times(1)).addAttribute(eq("recipes"), anySet());
         //=>La méthode getIndexPage() appelée plus haut renvoie un String ayant pour valeur "index"
         assertEquals("index",view);
 
