@@ -26,7 +26,12 @@ public class RecipeController {
     @GetMapping("/recipe/{id}/show")
     public String showById(@PathVariable String id, Model model){
 
-        model.addAttribute("recipe", recipeService.findById(new Long(id)));
+        try {
+            model.addAttribute("recipe", recipeService.findById(new Long(id)));
+        }
+        catch (NumberFormatException numberFormatException) {
+            throw new NumberFormatException("Bad Input String of : " + id + " ! We must have a Number !");
+        }
 
         return "recipe/show";
     }
@@ -75,4 +80,21 @@ public class RecipeController {
 
         return modelAndView;
     }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(NumberFormatException.class)
+    public ModelAndView handleNumberFormatException(Exception exception){
+
+        log.error("Handling number format exception");
+        log.error(exception.getMessage());
+
+        ModelAndView modelAndView = new ModelAndView();
+
+        modelAndView.setViewName("400error");
+        modelAndView.addObject("exception", exception);
+
+
+        return modelAndView;
+    }
+
 }
